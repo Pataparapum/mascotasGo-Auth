@@ -1,55 +1,49 @@
 import {Injectable} from '@nestjs/common';
-import { USER } from './interface/userInterface';
-import { log } from 'console';
+import { PrismaService } from '../prisma.service';
+import { USER } from '../Interfaces/userInterface';
+
 
 @Injectable()
 export class UserService {
 
-    id:number = 0
+    constructor(private prisma: PrismaService) {}
 
-    private users:USER[] = []
-
-    registerUser(user:USER): USER {
-        user.id = this.id
-        this.users.push(user);
-        this.id++;
-        return user;
+    registerUser(user:USER): Promise<USER> {
+        return this.prisma.user.create({data: user})
     }
 
-    getUser(): USER[] {
-        return this.users;
+    getUser() {
+        return this.prisma.user.findMany();
     }
 
-    getUserWithId(id:number): USER | string {
-        if (this.users.length == 0) return 'No hay usuario registrados';
-        for (let user of this.users) {
-            if (user.id == id) {
-                return user;
+    getUserWithId(id:string): Promise<USER> {
+        return this.prisma.user.findUnique({
+            where: {
+                id: id,
+            },
+        });
+    }
+
+    async updateUser(id:string, newUser:USER ) {
+        return this.prisma.user.update({
+            where: {
+                id: id,
+            },
+            data: {
+                username: newUser.username,
+                correo: newUser.correo,
+            },
+        });
+    }
+
+    async deleteUser(id:string): Promise<string> {
+        await this.prisma.user.delete({
+            where: {
+                id: id
             }
-        }
-        return `El Usuario de id ${id} no existe`;
-    }
-
-    updateUser(id:number, nombre:string, correo:string):USER | string {
-        if(this.users.length == 0) return 'No hay usuarios registrados';
-        for (let user of this.users) {
-            if (user.id == id) {
-                user.correo = correo;
-                user.nombre = nombre;
-                return user;
-            } 
-        }
-    }
-
-    deleteUser(id:number): string {
-        if(this.users.length == 0) return 'No hay usuarios registrados';
-        for (let user of this.users) {
-            if (user.id == id) {
-                let index = this.users.indexOf(user);
-                this.users.splice(index,1);
-                return `El usuario de id ${id} fue eliminado`
-            }
-        }
+        })
+    
+        return `El usuario de id ${id} fue eliminado`;
     }
     
 }
