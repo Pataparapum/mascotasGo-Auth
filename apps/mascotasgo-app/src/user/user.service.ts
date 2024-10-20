@@ -16,18 +16,18 @@ export class UserService {
         return this.prisma.user.findMany();
     }
 
-    getUserWithId(id:string): Promise<USER> {
+    getUserWithCorreo(correo:string): Promise<USER> {
         return this.prisma.user.findUnique({
             where: {
-                id: id,
+                correo: correo,
             },
         });
     }
 
-    async updateUser(id:string, newUser:USER ) {
+    async updateUser(correo:string, newUser:USER ) {
         return this.prisma.user.update({
             where: {
-                id: id,
+                correo: correo,
             },
             data: {
                 username: newUser.username,
@@ -36,14 +36,14 @@ export class UserService {
         });
     }
 
-    async deleteUser(id:string): Promise<string> {
+    async deleteUser(correo:string): Promise<string> {
         await this.prisma.user.delete({
             where: {
-                id: id
+                correo: correo
             }
         })
     
-        return `El usuario de id ${id} fue eliminado`;
+        return `El usuario de correo ${correo} fue eliminado`;
     }
     
 }
