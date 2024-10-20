@@ -34,3 +34,22 @@ export class UserDto implements Prisma.UserCreateInput {
     @IsNotEmpty()
     numero_mascotas: number;
 }
+
+export class UserDtoReturn {
+    
+    @IsString()
+    @IsNotEmpty()
+    @MinLength(1)
+    username: string;
+
+    @IsEmail()
+    @IsString()
+    @IsNotEmpty()
+    @MinLength(1)
+    correo: string;
+
+    @IsNumber()
+    @IsNotEmpty()
+    numero_mascotas: number;
+
+}

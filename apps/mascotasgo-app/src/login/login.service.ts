@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { UserLogin } from '../dto/userLog.dto';
-import { UserDto } from '../dto/user.dto';
+import { UserDto, UserDtoReturn } from '../dto/user.dto';
 import { UserService } from '../user/user.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -13,7 +13,7 @@ export class LoginService {
     async login(userLogin:UserLogin) {
         const { correo, password } = userLogin;
         
-        let user:UserDto = await this.prisma.getUserWithCorreo(correo);
+        let user:UserDto = await this.prisma.getUserWithCorreoForAuth(correo);
         
         if (!user) throw new HttpException('USER_NOT_FOUND', 404);
 
@@ -24,17 +24,11 @@ export class LoginService {
         const payload = { id:user.id, username: user.username };
         
         const token = await this.jwt.sign(payload);
-
-
-
-        console.log(token);
     
         const data = {
             user:user,
             token,
         };
-
-        console.log(data);
         
         return data;
     }

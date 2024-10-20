@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { UserDto } from '../dto/user.dto';
+import { UserDto, UserDtoReturn } from '../dto/user.dto';
 import { hash } from 'bcrypt'
 
 @Injectable()
@@ -21,16 +21,35 @@ export class UserService {
         return this.prisma.user.create({data:user})
     }
 
-    getUser(): Promise<UserDto[]> {
-        return this.prisma.user.findMany();
+    getUser(): Promise<UserDtoReturn[]> {
+        return this.prisma.user.findMany({
+            select: {
+                username: true,
+                correo:true,
+                numero_mascotas: true,
+            }
+        });
     }
 
-    getUserWithCorreo(correo:string): Promise<UserDto> {
+    getUserWithCorreoForClient(correo:string): Promise<UserDtoReturn> {
         return this.prisma.user.findUnique({
             where: {
                 correo: correo,
             },
+            select: {
+                username: true,
+                correo: true,
+                numero_mascotas: true
+            }
         });
+    }
+
+    getUserWithCorreoForAuth(correo:string): Promise<UserDto> {
+        return this.prisma.user.findUnique({
+            where:{
+                correo: correo
+            }
+        })
     }
 
     async updateUser(correo:string, newUser:UserDto ) {

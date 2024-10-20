@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserLogin } from '../dto/userLog.dto';
 import { LoginService } from './login.service';
-import { jwtConstanst } from './jwt.constants';
+import { jwtConstanst } from './jwt/jwt.constants';
 
 @Controller('login')
 export class LoginController {
