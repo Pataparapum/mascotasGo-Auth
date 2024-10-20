@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { USER } from "../Interfaces/userInterface";
-import { QUERYINTERFACE } from "../Interfaces/queryInterface";
+import { UserDto} from "../dto/user.dto";
+
 
 @Controller('user')
 export class userController {
@@ -9,29 +9,28 @@ export class userController {
     constructor(private database:UserService) {}
 
     @Get()
-    getUser(): Promise<USER[]> {
+    getUser(): Promise<UserDto[]> {
         return this.database.getUser();
     }
 
-    @Get('email')
-    getUserWithCorreo(@Query() correo:QUERYINTERFACE): Promise<USER> {
-        return this.database.getUserWithCorreo(correo.correo);
+    @Get(':correo')
+    getUserWithCorreo(@Param('correo') correo:string): Promise<UserDto> {
+        return this.database.getUserWithCorreo(correo);
     }
 
     @Post()
-    addUser(@Body() body:USER): Promise<USER> {
+    addUser(@Body() body:UserDto): Promise<UserDto> {
         return  this.database.registerUser(body);
     }
 
-    @Put('email')
-    updateUser(@Query() correo:QUERYINTERFACE, @Body() Body:USER ): Promise<USER> {
-        
-        return this.database.updateUser(correo.correo, Body);
+    @Put(':correo')
+    updateUser(@Param('correo') correo:string , @Body() Body:UserDto ): Promise<UserDto> {
+        return this.database.updateUser(correo, Body);
     }
 
-    @Delete('email') 
-    deleteUser(@Query() correo:QUERYINTERFACE): Promise<string> {
-        return this.database.deleteUser(correo.correo);
+    @Delete('') 
+    deleteUser(@Param('correo') correo:string): Promise<string> {
+        return this.database.deleteUser(correo);
     }
 
 }
