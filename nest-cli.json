@@ -1,8 +1,49 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
+<<<<<<< HEAD
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true
   }
 }
+=======
+  "sourceRoot": "apps/mascotasgo-app/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/mascotasgo-app/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/mascotasgo-app",
+  "projects": {
+    "mascotasgo-app": {
+      "type": "application",
+      "root": "apps/mascotasgo-app",
+      "entryFile": "main",
+      "sourceRoot": "apps/mascotasgo-app/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/mascotasgo-app/tsconfig.app.json"
+      }
+    },
+    "user-crud": {
+      "type": "application",
+      "root": "apps/user-crud",
+      "entryFile": "main",
+      "sourceRoot": "apps/user-crud/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/user-crud/tsconfig.app.json"
+      }
+    },
+    "user": {
+      "type": "application",
+      "root": "apps/user",
+      "entryFile": "main",
+      "sourceRoot": "apps/user/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/user/tsconfig.app.json"
+      }
+    }
+  }
+}
+>>>>>>> 9ac843031395a9cbfacf1d10b6d7c4f8ea38a8a7
