@@ -1,26 +1,24 @@
-import { UserDto, UserLogin } from './../dto/user.dto';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { UserObject } from './../dto/user.dto';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 import { Response } from 'express';
-import { ApiUserService } from 'src/api-user/api-user.service';
 
 @Injectable()
 export class LoginService {
 
-    constructor(private jwt:JwtService, private api:ApiUserService) {
+    constructor(private jwt:JwtService) {
 
     }
 
-    async login(userLogin:UserLogin, response:Response) {
-        const {correo, password} = userLogin;
+    async login(userData:UserObject, response:Response) {
+        
+        const { loginUser, user} = userData;
 
-        let user:UserDto = await this.api.findUser(correo);        
-
-        if(!user) return response.status(HttpStatus.NOT_FOUND)
+        if(user) return response.status(HttpStatus.NOT_FOUND)
                           .send({status:404, error:"El usuario no existe"});
 
-        const checkPassword = await compare(password, user.password)
+        const checkPassword = await compare(loginUser.password, user.password)
 
         if(!checkPassword) return response.status(403)
                                    .send({status:403, error:"La contraseña no es correcta"});

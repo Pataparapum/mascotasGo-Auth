@@ -6,7 +6,6 @@ import { jwtConstanst } from './jwt/jwt.constant';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { HttpModule } from '@nestjs/axios';
-import { ApiUserService } from 'src/api-user/api-user.service';
 
 @Module({
   imports: [
@@ -17,6 +16,6 @@ import { ApiUserService } from 'src/api-user/api-user.service';
     HttpModule
   ],
   controllers: [LoginController],
-  providers: [LoginService, JwtStrategy, ApiUserService]
+  providers: [LoginService, JwtStrategy]
 })
 export class LoginModule {}

@@ -1,5 +1,5 @@
+import { UserObject } from './../dto/user.dto';
 import { Body, Controller, Post, Res } from '@nestjs/common';
-import { UserLogin } from 'src/dto/user.dto';
 import { LoginService } from './login.service';
 import { Response } from 'express';
 
@@ -10,7 +10,7 @@ export class LoginController {
     constructor(private auth:LoginService){}
 
     @Post()
-    login(@Body() userLogin:UserLogin, @Res() response:Response) {
-        return this.auth.login(userLogin, response);
+    login(@Body() userData:UserObject, @Res() response:Response) {
+        return this.auth.login(userData, response);
     }
 }
